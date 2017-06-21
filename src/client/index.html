@@ -2,16 +2,21 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>My Page</title>
+    <title>Twinstick</title>
 </head>
 <body>
-    <h1>Hello, world</h1>
-    <script src="https://cdn.socket.io/socket.io-1.4.5.js" charset="utf-8"></script>
+    <!--
     <script>
       var socket = io();
       socket.emit('client-test-message', {
         message: 'test'
-      })
+      });
     </script>
+    -->
+    <div id='game'></div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/phaser.min.js" charset="utf-8"></script>
+    <script src="/js/client.js" charset="utf-8"></script>
+    <script src="/js/game.js" charset="utf-8"></script>
 </body>
 </html>
