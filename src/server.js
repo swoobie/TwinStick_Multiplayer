@@ -31,16 +31,35 @@ io.sockets.on('connection', function(socket){
     console.log('A new Player has joined.');
 
 // add a player property to the current socket
+// should use a prototype here to create the player
     socket.player = {
       id: serv.lastPlayerID++,
       x: Math.floor(Math.random() * 300 + 100),
       y: Math.floor(Math.random() * 300 + 100)
     }
 
-    socket.emit('allplayers', getAllPlayers());
+    socket.emit('allplayers', {players: getAllPlayers(), newPlayerId: socket.player.id});
     // notify all other clients of new player
     socket.broadcast.emit('newplayer', socket.player);
   })
+
+// Update player movement for a specific player id
+  socket.on('playerMove', function(data) {
+    var playerToUpdate;
+    var players = getAllPlayers();
+    for(i = 0; i < players.length; i++) {
+      if(players[i].id === data.id) {
+        console.log('found match: ' + data.id);
+        playerToUpdate = players[i];
+
+        playerToUpdate.x = data.direction === 'left' ? playerToUpdate.x - 1 : data.direction === 'right' ? playerToUpdate.x + 1 : playerToUpdate.x;
+
+        socket.broadcast.emit('playerMoveUpdate', playerToUpdate);
+        break;
+      }
+    }
+  });
+
 });
 
 
