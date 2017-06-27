@@ -1,5 +1,6 @@
 // Client.socket
 var Input = {
+	console.log('test change');
   update: function(){
     if (game.input.keyboard.isDown(Phaser.Keyboard.LEFT))
     {
