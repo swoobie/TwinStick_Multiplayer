@@ -56,6 +56,8 @@ io.sockets.on('connection', function(socket){
 
     // Update player movement for a specific player id
       socket.on('playerMove', function(data) {
+        if(typeof PlayerList.getActivePlayer(data.id) !== "undefined")
+        {
           if(data.direction === 'left')
           {
             PlayerList.getActivePlayer(data.id).x -= 1;
@@ -73,6 +75,7 @@ io.sockets.on('connection', function(socket){
             PlayerList.getActivePlayer(data.id).y += 1;
           }
           socket.broadcast.emit('playerMoveUpdate', PlayerList.getActivePlayer(data.id));
+        }
       });
 
       socket.on('disconnect', () => {
