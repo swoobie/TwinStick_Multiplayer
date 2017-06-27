@@ -1,7 +1,8 @@
 // Client.socket
 var Input = {
-	console.log('test change');
+	
   update: function(){
+	  console.log('test change');
     if (game.input.keyboard.isDown(Phaser.Keyboard.LEFT))
     {
       Client.socket.emit('playerMove', {id: Player.id, direction: 'left'});
