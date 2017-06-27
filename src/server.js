@@ -1,3 +1,5 @@
+var PlayerList = require('./server/player_list.js');
+
 // Parameters
 var sitePath = process.argv[2] || "./index.html";
 var port = 3000;
@@ -25,7 +27,8 @@ console.log('server started on port ' + port);
 
 // Handle Connections
 io.sockets.on('connection', function(socket){
-  console.log('socket connection established');
+  const sock_id = socket.id;
+  console.log('Socket Connected: ' + sock_id);
 
   socket.on('newplayer', function(data){
     console.log('A new Player has joined.');
@@ -33,10 +36,15 @@ io.sockets.on('connection', function(socket){
 // add a player property to the current socket
 // should use a prototype here to create the player
     socket.player = {
-      id: serv.lastPlayerID++,
+      //id: serv.lastPlayerID++,
+      id: sock_id,
+      image: 'ship',
       x: Math.floor(Math.random() * 300 + 100),
       y: Math.floor(Math.random() * 300 + 100)
     }
+
+    PlayerList.addActivePlayer(socket.player);
+    console.log(PlayerList.getActivePlayer(sock_id));
 
     socket.emit('allplayers', {players: getAllPlayers(), newPlayerId: socket.player.id});
     // notify all other clients of new player
@@ -45,22 +53,29 @@ io.sockets.on('connection', function(socket){
 
 // Update player movement for a specific player id
   socket.on('playerMove', function(data) {
-    var playerToUpdate;
-    var players = getAllPlayers();
-    for(i = 0; i < players.length; i++) {
-      if(players[i].id === data.id) {
-        console.log('found match: ' + data.id);
-        playerToUpdate = players[i];
-
-        playerToUpdate.x = data.direction === 'left' ? playerToUpdate.x - 1 : data.direction === 'right' ? playerToUpdate.x + 1 : playerToUpdate.x;
-		playerToUpdate.y = data.direction === 'up' ? playerToUpdate.y - 1 : data.direction === 'down' ? playerToUpdate.y + 1 : playerToUpdate.y;
-
-        socket.broadcast.emit('playerMoveUpdate', playerToUpdate);
-        break;
+      if(data.direction === 'left')
+      {
+        PlayerList.getActivePlayer(data.id).x -= 1;
       }
-    }
+      if(data.direction === 'right')
+      {
+        PlayerList.getActivePlayer(data.id).x += 1;
+      }
+      if(data.direction === 'up')
+      {
+        PlayerList.getActivePlayer(data.id).y -= 1;
+      }
+      if(data.direction === 'down')
+      {
+        PlayerList.getActivePlayer(data.id).y += 1;
+      }
+      socket.broadcast.emit('playerMoveUpdate', PlayerList.getActivePlayer(data.id));
   });
 
+  socket.on('disconnect', () => {
+    console.log('Socket ' + sock_id + ' has disconnected.');
+
+  })
 });
 
 

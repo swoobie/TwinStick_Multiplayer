@@ -1,32 +1,5 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-
-  var Client = {};
-  Client.socket = io.connect(); // specify connect here. default is localhost
-
-  Client.newPlayerJoin = function() {
-    Client.socket.emit('newplayer');
-  }
-
-  // when a new player joins, add them to the client's side of the game
-  Client.socket.on('newplayer',function(data){
-      Game.addNewPlayer(data.id,data.x,data.y);
-  });
-
-  // initialize all of the players currently in the game
-  Client.socket.on('allplayers',function(data){
-      console.log('received current player list: ' + data);
-      for(var i = 0; i < data.length; i++){
-          Game.addNewPlayer(data[i].id,data[i].x,data[i].y);
-      }
-  });
-module.export = Client;
-
-},{}],2:[function(require,module,exports){
-const Input = require('./input.js');
-const Client = require('./client.js');
 var game = new Phaser.Game(16*32, 600, Phaser.AUTO, document.getElementById('game'));
-console.log(Input);
-console.log(Client);
 var Game = {
   init: function() {
       game.stage.disableVisibilityChange = true;
@@ -53,24 +26,30 @@ var Game = {
   },
   update: function() {
     Input.update();
+    if(Game.playerMap[Player.id])
+    {
+      Game.playerMap[Player.id].x = Player.x;
+      Game.playerMap[Player.id].y = Player.y;
+    }
   }
 };
 
+// needs to change to take an object that defines a ship for both the client player and the other players
 Game.addNewPlayer = function(id,x,y){
-  console.log(id + ' ' + x + ' ' + y)
-    Game.playerMap[id] = game.add.sprite(x,y,'ship');
+    Player.id = id;
+    Player.x = x;
+    Player.y = y;
+    console.log('Adding local player: ' +Player.id + ' ' + Player.x + ' ' + Player.y);
+    Game.playerMap[Player.id] = game.add.sprite(Player.x, Player.y, Player.image);
+};
+
+// Adds a player already in the game
+Game.addExternalPlayer = function(id,x,y){
+    console.log('Adding external player: ' + id + ' ' + x + ' ' + y);
+    Game.playerMap[id] = game.add.sprite(x, y, 'ship');
 };
 
 game.state.add('Game',Game);
 game.state.start('Game');
 
-},{"./client.js":1,"./input.js":3}],3:[function(require,module,exports){
-// Client.socket
-module.export = function() {
-    if (game.input.keyboard.isDown(Phaser.Keyboard.LEFT))
-    {
-      console.log('key left down');
-    }
-  }
-
-},{}]},{},[2]);
+},{}]},{},[1]);
