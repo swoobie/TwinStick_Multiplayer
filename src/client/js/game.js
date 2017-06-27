@@ -48,5 +48,10 @@ Game.addExternalPlayer = function(id,x,y){
     Game.playerMap[id] = game.add.sprite(x, y, 'ship');
 };
 
+Game.removePlayer = function(id){
+    Game.playerMap[id].destroy();
+    delete Game.playerMap[id];
+};
+
 game.state.add('Game',Game);
 game.state.start('Game');

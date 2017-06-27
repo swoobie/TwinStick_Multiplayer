@@ -14,4 +14,12 @@ Players.getActivePlayer = function(socketId) {
   });
 }
 
+Players.removeActivePlayer = function(socketId) {
+  this.available.splice(
+    this.available.findIndex((p)=> {
+     return p.id === socketId;
+    }),
+  1);
+}
+
 module.exports = Players;

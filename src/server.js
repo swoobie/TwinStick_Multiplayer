@@ -8,7 +8,7 @@ var port = 3000;
 var express = require('express');
 var app = express();
 var serv = require('http').Server(app);
-var io = require('socket.io').listen(serv);
+var io = require('socket.io').listen(serv);  // used for sending messages to everyone
 
 // setup client paths
 app.use('/', express.static(__dirname + '/client'));
@@ -49,31 +49,38 @@ io.sockets.on('connection', function(socket){
     socket.emit('allplayers', {players: getAllPlayers(), newPlayerId: socket.player.id});
     // notify all other clients of new player
     socket.broadcast.emit('newplayer', socket.player);
-  })
 
-// Update player movement for a specific player id
-  socket.on('playerMove', function(data) {
-      if(data.direction === 'left')
-      {
-        PlayerList.getActivePlayer(data.id).x -= 1;
-      }
-      if(data.direction === 'right')
-      {
-        PlayerList.getActivePlayer(data.id).x += 1;
-      }
-      if(data.direction === 'up')
-      {
-        PlayerList.getActivePlayer(data.id).y -= 1;
-      }
-      if(data.direction === 'down')
-      {
-        PlayerList.getActivePlayer(data.id).y += 1;
-      }
-      socket.broadcast.emit('playerMoveUpdate', PlayerList.getActivePlayer(data.id));
-  });
+    // The rest of the functions that only matter if a player is connected
+    // have to be nested within the newPlayer callback to prevent accidental crashes
+    // if they are called out of order.
 
-  socket.on('disconnect', () => {
-    console.log('Socket ' + sock_id + ' has disconnected.');
+    // Update player movement for a specific player id
+      socket.on('playerMove', function(data) {
+          if(data.direction === 'left')
+          {
+            PlayerList.getActivePlayer(data.id).x -= 1;
+          }
+          if(data.direction === 'right')
+          {
+            PlayerList.getActivePlayer(data.id).x += 1;
+          }
+          if(data.direction === 'up')
+          {
+            PlayerList.getActivePlayer(data.id).y -= 1;
+          }
+          if(data.direction === 'down')
+          {
+            PlayerList.getActivePlayer(data.id).y += 1;
+          }
+          socket.broadcast.emit('playerMoveUpdate', PlayerList.getActivePlayer(data.id));
+      });
+
+      socket.on('disconnect', () => {
+        console.log('Socket ' + sock_id + ' has disconnected.');
+        io.emit('playerDisconnected', sock_id); // send message to all connected clients
+        //remove from player list as well
+        PlayerList.removeActivePlayer(sock_id);
+      });
 
   })
 });

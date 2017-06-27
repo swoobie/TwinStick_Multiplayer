@@ -28,3 +28,8 @@ Client.socket.on('playerMoveUpdate', function(data) {
   Game.playerMap[data.id].y = data.y;
   console.log('Received updated move: ' + data.id + ' ' + data.x + ' ' + data.y);
 });
+
+Client.socket.on('playerDisconnected', function(id) {
+  console.log('Player "' + id + '" has left the game.');
+  Game.removePlayer(id);
+})
