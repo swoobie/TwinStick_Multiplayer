@@ -53,6 +53,7 @@ io.sockets.on('connection', function(socket){
         playerToUpdate = players[i];
 
         playerToUpdate.x = data.direction === 'left' ? playerToUpdate.x - 1 : data.direction === 'right' ? playerToUpdate.x + 1 : playerToUpdate.x;
+		playerToUpdate.y = data.direction === 'up' ? playerToUpdate.y - 1 : data.direction === 'down' ? playerToUpdate.y + 1 : playerToUpdate.y;
 
         socket.broadcast.emit('playerMoveUpdate', playerToUpdate);
         break;

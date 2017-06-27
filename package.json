@@ -2,7 +2,7 @@
   "name": "twinstick",
   "version": "1.0.0",
   "description": "proof of concept",
-  "main": "src/index.js",
+  "main": "src/server.js",
   "dependencies": {
     "express": "^4.15.3",
     "phaser": "^2.6.2",

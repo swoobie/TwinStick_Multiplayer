@@ -13,5 +13,17 @@ var Input = {
       Player.move(Player.x + 1, Player.y);
       console.log('Local Move: ' + Player.id + ' ' + Player.x + ' ' + Player.y);
     }
+	if (game.input.keyboard.isDown(Phaser.Keyboard.UP))
+    {
+      Client.socket.emit('playerMove', {id: Player.id, direction: 'up'});
+      Player.move(Player.x, Player.y - 1);
+      console.log('Local Move: ' + Player.id + ' ' + Player.x + ' ' + Player.y + ' up');
+    }
+	if (game.input.keyboard.isDown(Phaser.Keyboard.DOWN))
+    {
+      Client.socket.emit('playerMove', {id: Player.id, direction: 'down'});
+      Player.move(Player.x, Player.y + 1);
+      console.log('Local Move: ' + Player.id + ' ' + Player.x + ' ' + Player.y + ' down');
+    }
   }
 }
