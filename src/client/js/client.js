@@ -1,5 +1,5 @@
 var Client = {};
-Client.socket = io.connect(); // specify connect here. default is localhost
+Client.socket = io.connect({transports: ['websocket']}); // specify connect here. default is localhost
 
 Client.newPlayerJoin = function() {
   Client.socket.emit('newplayer');
