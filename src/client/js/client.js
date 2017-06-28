@@ -21,15 +21,19 @@ Client.socket.on('allplayers',function(data){
         Game.addNewPlayer(data.players[i].id, data.players[i].x, data.players[i].y);
     }
     console.log('My id should be: ' + data.newPlayerId);
-});
 
-Client.socket.on('playerMoveUpdate', function(data) {
-  Game.playerMap[data.id].x = data.x;
-  Game.playerMap[data.id].y = data.y;
-  console.log('Received updated move: ' + data.id + ' ' + data.x + ' ' + data.y);
-});
+// after we have added all of the players, setup the appropriate callbacks for dealing with them
+    Client.socket.on('playerMoveUpdate', function(data) {
+      console.log('Received move for player: ' + data.id + ' to position: ' + data.x + ', ' + data.y);
+      Game.moveExternalPlayer(data);
+    });
 
-Client.socket.on('playerDisconnected', function(id) {
-  console.log('Player "' + id + '" has left the game.');
-  Game.removePlayer(id);
-})
+    Client.socket.on('playerDisconnected', function(id) {
+      console.log('Player "' + id + '" has left the game.');
+      Game.removePlayer(id);
+    });
+
+    Client.socket.on('correctedMove', function(position) {
+      //Game.moveCurrentPlayer(position);
+    });
+});

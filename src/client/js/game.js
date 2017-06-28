@@ -29,6 +29,7 @@ var Game = {
     {
       Game.playerMap[Player.id].x = Player.x;
       Game.playerMap[Player.id].y = Player.y;
+      Game.playerMap[Player.id].angle = Player.angle;
     }
   }
 };
@@ -40,13 +41,34 @@ Game.addNewPlayer = function(id,x,y){
     Player.y = y;
     console.log('Adding local player: ' +Player.id + ' ' + Player.x + ' ' + Player.y);
     Game.playerMap[Player.id] = game.add.sprite(Player.x, Player.y, Player.image);
+    Game.playerMap[Player.id].anchor.setTo(0.5, 0.5);
 };
 
 // Adds a player already in the game
 Game.addExternalPlayer = function(id,x,y){
     console.log('Adding external player: ' + id + ' ' + x + ' ' + y);
     Game.playerMap[id] = game.add.sprite(x, y, 'ship');
+    Game.playerMap[id].anchor.setTo(0.5, 0.5);
 };
+
+// Game.moveCurrentPlayer = function(position) {
+//   var player = Game.playerMap[Player.id];
+//   var distance = Phaser.Math.distance(player.x, player.y, position.x, position.y);
+//   var duration = distance*10;
+//   var tween = game.add.tween(player);
+//   tween.to({x:position.x, y:position.y}, duration);
+//   tween.start();
+// };
+
+// Change this so either the server sends messages less frequently or the client handles frequent messages better.
+Game.moveExternalPlayer = function(playerData) {
+  var player = Game.playerMap[playerData.id];
+  var distance = Phaser.Math.distance(player.x, player.y, playerData.x, playerData.y);
+  var duration = 10;
+  var tween = game.add.tween(player);
+  tween.to({x:playerData.x, y:playerData.y}, duration);
+  tween.start();
+}
 
 Game.removePlayer = function(id){
     Game.playerMap[id].destroy();
