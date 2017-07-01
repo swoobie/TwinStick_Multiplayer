@@ -24,7 +24,7 @@ Client.socket.on('allplayers',function(data){
 
 // after we have added all of the players, setup the appropriate callbacks for dealing with them
     Client.socket.on('playerMoveUpdate', function(data) {
-      console.log('Received move for player: ' + data.id + ' to position: ' + data.x + ', ' + data.y);
+      console.log('Received move for player: ' + data.id + ' to position: ' + data.x + ', ' + data.y + ', rotation: ' + data.angle);
       Game.moveExternalPlayer(data);
     });
 
@@ -37,3 +37,7 @@ Client.socket.on('allplayers',function(data){
       //Game.moveCurrentPlayer(position);
     });
 });
+
+Client.sendMessage = function(header, obj) {
+  Client.socket.emit(header, obj);
+}

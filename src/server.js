@@ -60,19 +60,19 @@ io.sockets.on('connection', function(socket){
         {
           if(data.direction === 'left')
           {
-            PlayerList.getActivePlayer(data.id).x -= 1;
+            PlayerList.getActivePlayer(data.id).rotateLeft();
           }
           if(data.direction === 'right')
           {
-            PlayerList.getActivePlayer(data.id).x += 1;
+            PlayerList.getActivePlayer(data.id).rotateRight();
           }
           if(data.direction === 'up')
           {
-            PlayerList.getActivePlayer(data.id).y -= 1;
+            PlayerList.getActivePlayer(data.id).moveForward();
           }
           if(data.direction === 'down')
           {
-            PlayerList.getActivePlayer(data.id).y += 1;
+            PlayerList.getActivePlayer(data.id).moveBackward();
           }
           socket.broadcast.emit('playerMoveUpdate', PlayerList.getActivePlayer(data.id));
         }

@@ -63,11 +63,9 @@ Game.addExternalPlayer = function(id,x,y){
 // Change this so either the server sends messages less frequently or the client handles frequent messages better.
 Game.moveExternalPlayer = function(playerData) {
   var player = Game.playerMap[playerData.id];
-  var distance = Phaser.Math.distance(player.x, player.y, playerData.x, playerData.y);
-  var duration = 10;
-  var tween = game.add.tween(player);
-  tween.to({x:playerData.x, y:playerData.y}, duration);
-  tween.start();
+  player.x = playerData.x;
+  player.y = playerData.y;
+  player.angle = playerData.angle;
 }
 
 Game.removePlayer = function(id){
