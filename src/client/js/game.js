@@ -75,3 +75,6 @@ Game.removePlayer = function(id){
 
 game.state.add('Game',Game);
 game.state.start('Game');
+
+
+var moveSender = setInterval(Client.sendMoves, 16.6666);

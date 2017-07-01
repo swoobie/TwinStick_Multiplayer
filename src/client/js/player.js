@@ -5,7 +5,7 @@ var Player = {
   y: 0,
   angle: 0,
   angleOffset: 90,
-  moveSpeed: 1,
+  moveSpeed: 2,
   turnSpeed: 1
 };
 

@@ -58,22 +58,28 @@ io.sockets.on('connection', function(socket){
       socket.on('playerMove', function(data) {
         if(typeof PlayerList.getActivePlayer(data.id) !== "undefined")
         {
-          if(data.direction === 'left')
-          {
-            PlayerList.getActivePlayer(data.id).rotateLeft();
-          }
-          if(data.direction === 'right')
-          {
-            PlayerList.getActivePlayer(data.id).rotateRight();
-          }
-          if(data.direction === 'up')
-          {
-            PlayerList.getActivePlayer(data.id).moveForward();
-          }
-          if(data.direction === 'down')
-          {
-            PlayerList.getActivePlayer(data.id).moveBackward();
-          }
+          data.input.forEach(function(dir) {
+            if(dir === 'left')
+            {
+              PlayerList.getActivePlayer(data.id).rotateLeft();
+            }
+            if(dir === 'right')
+            {
+              PlayerList.getActivePlayer(data.id).rotateRight();
+            }
+            if(dir === 'up')
+            {
+              PlayerList.getActivePlayer(data.id).moveForward();
+            }
+            if(dir === 'down')
+            {
+              PlayerList.getActivePlayer(data.id).moveBackward();
+            }
+          });
+
+
+
+          // need to instead, pool all of the moves and send out the update 60 times a second or so.
           socket.broadcast.emit('playerMoveUpdate', PlayerList.getActivePlayer(data.id));
         }
       });

@@ -1,6 +1,9 @@
 var Client = {};
 Client.socket = io.connect({transports: ['websocket']}); // specify connect here. default is localhost
 
+// Holds all of the moves the player has made. Gets sent 60 times a second to the server.
+Client.movesList = [];
+
 Client.newPlayerJoin = function() {
   Client.socket.emit('newplayer');
 }
@@ -24,7 +27,6 @@ Client.socket.on('allplayers',function(data){
 
 // after we have added all of the players, setup the appropriate callbacks for dealing with them
     Client.socket.on('playerMoveUpdate', function(data) {
-      console.log('Received move for player: ' + data.id + ' to position: ' + data.x + ', ' + data.y + ', rotation: ' + data.angle);
       Game.moveExternalPlayer(data);
     });
 
@@ -38,6 +40,10 @@ Client.socket.on('allplayers',function(data){
     });
 });
 
-Client.sendMessage = function(header, obj) {
-  Client.socket.emit(header, obj);
+Client.sendMoves = function() {
+  // only send moves if we have them
+  if(Client.movesList.length !== 0) {
+    Client.socket.emit('playerMove', {id: Player.id, input: Client.movesList});
+    Client.movesList = []
+  }
 }

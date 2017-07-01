@@ -5,7 +5,7 @@ function Player(socketId, image, x, y) {
   this.y = y;
   this.angle = 0;
   this.angleOffset = 90;
-  this.moveSpeed = 1;
+  this.moveSpeed = 2;
   this.turnSpeed = 1;
 
   this.moveForward = function() {
