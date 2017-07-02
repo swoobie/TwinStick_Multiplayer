@@ -78,7 +78,7 @@ io.sockets.on('connection', function(socket){
             }
           });
           // need to instead, pool all of the moves and send out the update 60 times a second or so.
-          socket.broadcast.emit('playerMoveUpdate', PlayerList.getActivePlayer(data.id));
+          socket.broadcast.emit('playerMoveUpdate', player);
         }
       });
 
