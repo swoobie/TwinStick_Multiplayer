@@ -46,9 +46,9 @@ io.sockets.on('connection', function(socket){
     PlayerList.addActivePlayer(socket.player);
     console.log(PlayerList.getActivePlayer(sock_id));
 
-    socket.emit('allplayers', {players: getAllPlayers(), newPlayerId: socket.player.id});
+    socket.emit('allplayers', {players: PlayerList.available, newPlayerId: socket.player.id});
     // notify all other clients of new player
-    socket.broadcast.emit('newplayer', socket.player);
+    socket.broadcast.emit('newplayer', PlayerList.getActivePlayer(sock_id));
 
     // The rest of the functions that only matter if a player is connected
     // have to be nested within the newPlayer callback to prevent accidental crashes
@@ -58,27 +58,25 @@ io.sockets.on('connection', function(socket){
       socket.on('playerMove', function(data) {
         if(typeof PlayerList.getActivePlayer(data.id) !== "undefined")
         {
+          let player = PlayerList.getActivePlayer(data.id);
           data.input.forEach(function(dir) {
             if(dir === 'left')
             {
-              PlayerList.getActivePlayer(data.id).rotateLeft();
+              player.rotateLeft();
             }
             if(dir === 'right')
             {
-              PlayerList.getActivePlayer(data.id).rotateRight();
+              player.rotateRight();
             }
             if(dir === 'up')
             {
-              PlayerList.getActivePlayer(data.id).moveForward();
+              player.moveForward();
             }
             if(dir === 'down')
             {
-              PlayerList.getActivePlayer(data.id).moveBackward();
+              player.moveBackward();
             }
           });
-
-
-
           // need to instead, pool all of the moves and send out the update 60 times a second or so.
           socket.broadcast.emit('playerMoveUpdate', PlayerList.getActivePlayer(data.id));
         }

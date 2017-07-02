@@ -10,7 +10,7 @@ Client.newPlayerJoin = function() {
 
 // when a new player joins, add them to the client's side of the game
 Client.socket.on('newplayer',function(data){
-    Game.addExternalPlayer(data.id,data.x,data.y);
+    Game.addExternalPlayer(data);
 });
 
 // initialize all of the players currently in the game
@@ -19,7 +19,7 @@ Client.socket.on('allplayers',function(data){
     console.log(data);
     for(var i = 0; i < data.players.length; i++){
       if(data.newPlayerId !== data.players[i].id)
-        Game.addExternalPlayer(data.players[i].id, data.players[i].x, data.players[i].y);
+        Game.addExternalPlayer(data.players[i]);
       else
         Game.addNewPlayer(data.players[i].id, data.players[i].x, data.players[i].y);
     }

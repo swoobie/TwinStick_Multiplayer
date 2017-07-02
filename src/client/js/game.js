@@ -1,4 +1,5 @@
 var game = new Phaser.Game(16*32, 600, Phaser.AUTO, document.getElementById('game'));
+var moveSender = setInterval(Client.sendMoves, 16.6666);
 var Game = {
   init: function() {
       game.stage.disableVisibilityChange = true;
@@ -45,10 +46,12 @@ Game.addNewPlayer = function(id,x,y){
 };
 
 // Adds a player already in the game
-Game.addExternalPlayer = function(id,x,y){
-    console.log('Adding external player: ' + id + ' ' + x + ' ' + y);
-    Game.playerMap[id] = game.add.sprite(x, y, 'ship');
-    Game.playerMap[id].anchor.setTo(0.5, 0.5);
+Game.addExternalPlayer = function(player){
+    console.log('Adding external player: '); console.log(player);
+    console.log('Adding external player: ' + player.id + ' ' + player.x + ' ' + player.y);
+    Game.playerMap[player.id] = game.add.sprite(player.x, player.y, player.image);
+    Game.playerMap[player.id].anchor.setTo(0.5, 0.5);
+    Game.playerMap[player.id].angle = player.angle;
 };
 
 // Game.moveCurrentPlayer = function(position) {
@@ -75,6 +78,3 @@ Game.removePlayer = function(id){
 
 game.state.add('Game',Game);
 game.state.start('Game');
-
-
-var moveSender = setInterval(Client.sendMoves, 16.6666);
