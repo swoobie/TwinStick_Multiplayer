@@ -14,7 +14,7 @@ var path = require('path');
 
 // setup client paths
 app.use('/', express.static(__dirname + '/client'));
-app.use(favicon('favicon.ico'));
+app.use(favicon(path.join(__dirname, 'client', 'favicon.ico')));
 
 // send initial index.html as root for client
 app.get('/', function(req, res) {
