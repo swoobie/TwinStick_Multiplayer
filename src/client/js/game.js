@@ -69,6 +69,8 @@ Game.moveExternalPlayer = function(playerData) {
   player.x = playerData.x;
   player.y = playerData.y;
   player.angle = playerData.angle;
+  console.log(playerData);
+  console.log(Game.playerMap[playerData.id]);
 }
 
 Game.removePlayer = function(id){
