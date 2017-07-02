@@ -47,7 +47,6 @@ Game.addNewPlayer = function(id,x,y){
 
 // Adds a player already in the game
 Game.addExternalPlayer = function(player){
-    console.log('Adding external player: '); console.log(player);
     console.log('Adding external player: ' + player.id + ' ' + player.x + ' ' + player.y);
     Game.playerMap[player.id] = game.add.sprite(player.x, player.y, player.image);
     Game.playerMap[player.id].anchor.setTo(0.5, 0.5);
@@ -65,7 +64,7 @@ Game.addExternalPlayer = function(player){
 
 // Change this so either the server sends messages less frequently or the client handles frequent messages better.
 Game.moveExternalPlayer = function(playerData) {
-  var player = Game.playerMap[playerData.id];
+  let player = Game.playerMap[playerData.id];
   player.x = playerData.x;
   player.y = playerData.y;
   player.angle = playerData.angle;
