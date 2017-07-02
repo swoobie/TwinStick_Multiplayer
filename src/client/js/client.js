@@ -27,7 +27,8 @@ Client.socket.on('allplayers',function(data){
 
 // after we have added all of the players, setup the appropriate callbacks for dealing with them
     Client.socket.on('playerMoveUpdate', function(data) {
-      console.log('Received move for player: ' + data.id + ' to position: ' + data.x + ', ' + data.y + ', rotation: ' + data.angle);
+      console.log('Received move for player:');
+      console.log(data);
       Game.moveExternalPlayer(data);
     });
 
